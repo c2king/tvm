@@ -1,0 +1,394 @@
+<!doctype html>
+Here is the updated HTML code for an interactive Time Value of Money quiz game, ensuring that if a student answers a question incorrectly, they are given a chance to choose another answer. The answers are not randomized this time.
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Time Value of Money Quiz</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        h1, h2 {
+            color: #2c3e50;
+        }
+        .container {
+            background-color: #fff;
+            border-radius: 5px;
+            padding: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        #question-container {
+            margin-top: 20px;
+        }
+        .btn {
+            display: inline-block;
+            background: #3498db;
+            color: #fff;
+            padding: 10px 20px;
+            margin: 10px 5px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .btn:hover {
+            background: #2980b9;
+        }
+        .btn:disabled {
+            background: #bdc3c7;
+            cursor: not-allowed;
+        }
+        #result {
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        #progress {
+            margin-top: 20px;
+        }
+        .answer-btn {
+            display: block;
+            width: 100%;
+            text-align: left;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Time Value of Money Quiz</h1>
+        
+        <div id="intro">
+            <h2>Introduction</h2>
+            <p>Time Value of Money (TVM) is a fundamental concept in finance that recognizes that money available now is worth more than the same amount in the future due to its potential earning capacity. This concept is crucial for university business students to understand because it forms the basis for many financial decisions, including investment analysis, capital budgeting, and loan calculations.</p>
+            <p>Key TVM concepts include:</p>
+            <ul>
+                <li>Present Value (PV)</li>
+                <li>Future Value (FV)</li>
+                <li>Compound Interest</li>
+                <li>Annuities</li>
+            </ul>
+            <p>Understanding TVM allows students to make informed financial decisions and evaluate investment opportunities effectively.</p>
+            
+            <h2>How to Play</h2>
+            <ol>
+                <li>Click the "Start Quiz" button to begin.</li>
+                <li>Read each question carefully and select the best answer from the four options provided.</li>
+                <li>If you answer correctly, you can move to the next question.</li>
+                <li>If you answer incorrectly, you'll have another chance to select the correct answer.</li>
+                <li>Use the "Next" and "Previous" buttons to navigate through the questions.</li>
+                <li>Answer all 10 questions to complete the quiz.</li>
+            </ol>
+            <button id="start-btn" class="btn">Start Quiz</button>
+        </div>
+        
+        <div id="quiz" style="display: none;">
+            <div id="question-container"></div>
+            <div id="result"></div>
+            <div id="progress"></div>
+            <button id="prev-btn" class="btn" disabled>Previous</button>
+            <button id="next-btn" class="btn" disabled>Next</button>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                question: "What does the Time Value of Money concept state?",
+                answers: [
+                    "Money today is worth less than the same amount in the future",
+                    "Money today is worth more than the same amount in the future",
+                    "Money has no time value",
+                    "Time has no effect on money's value"
+                ],
+                correctAnswer: 1
+            },
+            {
+                question: "Which of the following is NOT a key factor in Time Value of Money calculations?",
+                answers: [
+                    "Interest rate",
+                    "Number of periods",
+                    "Present value",
+                    "Stock market performance"
+                ],
+                correctAnswer: 3
+            },
+            {
+                question: "What is compound interest?",
+                answers: [
+                    "Interest calculated only on the principal amount",
+                    "Interest calculated on the principal and accumulated interest",
+                    "A fixed amount of interest paid annually",
+                    "Interest that decreases over time"
+                ],
+                correctAnswer: 1
+            },
+            {
+                question: "What is an annuity?",
+                answers: [
+                    "A one-time lump sum payment",
+                    "A series of equal payments made at fixed intervals",
+                    "An interest-free loan",
+                    "A type of stock investment"
+                ],
+                correctAnswer: 1
+            },
+            {
+                question: "What is the difference between an ordinary annuity and an annuity due?",
+                answers: [
+                    "Ordinary annuity payments occur at the beginning of each period, annuity due at the end",
+                    "Ordinary annuity payments occur at the end of each period, annuity due at the beginning",
+                    "Ordinary annuities earn interest, annuity due does not",
+                    "There is no difference between the two"
+                ],
+                correctAnswer: 1
+            },
+            {
+                question: "What is the present value of $1,000 to be received in 2 years, assuming a 6% annual interest rate?",
+                answers: [
+                    "$890.00",
+                    "$943.40",
+                    "$1,060.00",
+                    "$1,123.60"
+                ],
+                correctAnswer: 0
+            },
+            {
+                question: "What is the future value of $5,000 invested for 3 years at 8% interest, compounded annually?",
+                answers: [
+                    "$5,400.00",
+                    "$5,832.00",
+                    "$6,298.56",
+                    "$6,480.00"
+                ],
+                correctAnswer: 2
+            },
+            {
+                question: "Calculate the present value of an ordinary annuity of $1,000 paid annually for 5 years, assuming a 10% interest rate.",
+                answers: [
+                    "$3,790.79",
+                    "$4,169.87",
+                    "$5,000.00",
+                    "$6,105.10"
+                ],
+                correctAnswer: 0
+            },
+            {
+                question: "What is the future value of an annuity due of $2,000 paid annually for 4 years at 6% interest?",
+                answers: [
+                    "$8,000.00",
+                    "$8,480.00",
+                    "$9,274.19",
+                    "$9,526.13"
+                ],
+                correctAnswer: 2
+            },
+            {
+                question: "If you want to have $10,000 in 5 years and can earn 8% interest compounded annually, how much should you invest today?",
+                answers: [
+                    "$6,805.83",
+                    "$7,350.26",
+                    "$8,000.00",
+                    "$9,259.26"
+                ],
+                correctAnswer: 0
+            },
+            {
+                question: "What is the effective annual rate if interest is compounded semi-annually at 10%?",
+                answers: [
+                    "10.00%",
+                    "10.25%",
+                    "10.50%",
+                    "10.75%"
+                ],
+                correctAnswer: 1
+            },
+            {
+                question: "Which of the following is true about the relationship between present value and future value?",
+                answers: [
+                    "Present value is always greater than future value",
+                    "Future value is always greater than present value",
+                    "Present value equals future value minus interest",
+                    "Present value and future value are always equal"
+                ],
+                correctAnswer: 1
+            },
+            {
+                question: "What is the future value of $1,000 invested for 2 years at 4% interest compounded semi-annually?",
+                answers: [
+                    "$1,080.00",
+                    "$1,081.60",
+                    "$1,082.43",
+                    "$1,084.16"
+                ],
+                correctAnswer: 2
+            },
+            {
+                question: "Calculate the present value of $5,000 to be received in 3 years, assuming a 6% annual interest rate.",
+                answers: [
+                    "$4,193.80",
+                    "$4,198.56",
+                    "$4,528.30",
+                    "$4,705.43"
+                ],
+                correctAnswer: 1
+            },
+            {
+                question: "What is the future value of an ordinary annuity of $3,000 paid annually for 5 years at 8% interest?",
+                answers: [
+                    "$15,000.00",
+                    "$16,200.00",
+                    "$17,600.00",
+                    "$18,676.00"
+                ],
+                correctAnswer: 2
+            },
+            {
+                question: "If you borrow $50,000 today at 6% annual interest what will be the total amount you need to repay in 4 years?",
+                answers: [
+                    "$59,383.28",
+                    "$62,000.00",
+                    "$63,123.85",
+                    "$66,000.00"
+                ],
+                correctAnswer: 2
+            },
+            {
+                question: "What is the present value of $1,000 to be received at the end of each year for 3 years, assuming a 10% discount rate?",
+                answers: [
+                    "$2,486.90",
+                    "$2,735.54",
+                    "$3,000.00",
+                    "$3,310.00"
+                ],
+                correctAnswer: 0
+            },
+            {
+                question: "Calculate the future value of $2,000 invested annually for 4 years at 6% interest, assuming it's an annuity due.",
+                answers: [
+                    "$8,480.00",
+                    "$8,988.80",
+                    "$9,274.19",
+                    "$10,097.70"
+                ],
+                correctAnswer: 2
+            },
+            {
+                question: "What is the present value of a perpetuity that pays $500 annually, assuming a 5% interest rate?",
+                answers: [
+                    "$2,500.00",
+                    "$5,000.00",
+                    "$10,000.00",
+                    "$25,000.00"
+                ],
+                correctAnswer: 2
+            },
+            {
+                question: "If you want to accumulate $50,000 in 10 years by making equal annual deposits at the end of each year, how much should you deposit if you can earn 8% interest?",
+                answers: [
+                    "$3,024.52",
+                    "$3,451.98",
+                    "$4,183.29",
+                    "$5,000.00"
+                ],
+                correctAnswer: 1
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let quizQuestions = [];
+
+        const startBtn = document.getElementById('start-btn');
+        const quizContainer = document.getElementById('quiz');
+        const questionContainer = document.getElementById('question-container');
+        const resultDiv = document.getElementById('result');
+        const progressDiv = document.getElementById('progress');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+
+        startBtn.addEventListener('click', startQuiz);
+        prevBtn.addEventListener('click', showPreviousQuestion);
+        nextBtn.addEventListener('click', showNextQuestion);
+
+        function startQuiz() {
+            document.getElementById('intro').style.display = 'none';
+            quizContainer.style.display = 'block';
+            quizQuestions = getRandomQuestions(10);
+            showQuestion(currentQuestionIndex);
+        }
+
+        function getRandomQuestions(num) {
+            const shuffled = [...questions].sort(() => 0.5 - Math.random());
+            return shuffled.slice(0, num);
+        }
+
+        function showQuestion(index) {
+            const question = quizQuestions[index];
+            
+            questionContainer.innerHTML = `
+                <h2>Question ${index + 1}</h2>
+                <p>${question.question}</p>
+                ${question.answers.map((answer, i) => `
+                    <button class="btn answer-btn" onclick="checkAnswer(${i})">${answer}</button>
+                `).join('')}
+            `;
+            
+            updateProgress();
+            updateNavButtons();
+        }
+
+        function checkAnswer(selectedIndex) {
+            const question = quizQuestions[currentQuestionIndex];
+            const correctIndex = question.correctAnswer;
+            
+            if (selectedIndex === correctIndex) {
+                resultDiv.innerHTML = "Correct!";
+                resultDiv.style.color = "green";
+                nextBtn.disabled = false;
+            } else {
+                resultDiv.innerHTML = "Incorrect. Try again.";
+                resultDiv.style.color = "red";
+                nextBtn.disabled = true;
+            }
+        }
+
+        function showNextQuestion() {
+            if (currentQuestionIndex < quizQuestions.length - 1) {
+                currentQuestionIndex++;
+                showQuestion(currentQuestionIndex);
+                resultDiv.innerHTML = "";
+                nextBtn.disabled = true;
+            }
+        }
+
+        function showPreviousQuestion() {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                showQuestion(currentQuestionIndex);
+                resultDiv.innerHTML = "";
+                nextBtn.disabled = true;
+            }
+        }
+
+        function updateProgress() {
+            progressDiv.innerHTML = `Question ${currentQuestionIndex + 1} of ${quizQuestions.length}`;
+        }
+
+        function updateNavButtons() {
+            prevBtn.disabled = currentQuestionIndex === 0;
+            nextBtn.disabled = true;
+        }
+    </script>
+</body>
+</html>
+```
+
